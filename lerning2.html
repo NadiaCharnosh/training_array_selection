@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фільтрація товарів</title>
+</head>
+
+<body>
+    <h1>Фільтр товарів</h1>
+
+    <!-- Поля для введення мінімальної та максимальної ціни -->
+    <label>Мінімальна ціна:
+        <input type="number" id="minPrice" value="300">
+    </label>
+
+    <label>Максимальна ціна:
+        <input type="number" id="maxPrice" value="1000">
+    </label>
+
+    <!-- Список категорій для вибору -->
+    <label>Категорія:
+        <select id="category">
+            <option value="">Усі</option>
+            <option value="Електроніка">Електроніка</option>
+            <option value="Побутова техніка">Побутова техніка</option>
+        </select>
+    </label>
+
+    <!-- Кнопка для застосування фільтра -->
+    <button onclick="applyFilter()">Застосувати фільтр</button>
+
+    <!-- Блок для відображення результатів фільтрації -->
+    <h2>Результати:</h2>
+    <ul id="results"></ul>
+
+    <script>
+        // Масив продуктів з назвою, ціною та категорією
+        const products = [
+            { name: "Ноутбук", price: 1500, category: "Електроніка" },
+            { name: "Телевізор", price: 800, category: "Електроніка" },
+            { name: "Пральна машина", price: 400, category: "Побутова техніка" },
+            { name: "Пилосос", price: 200, category: "Побутова техніка" },
+            { name: "Телефон", price: 600, category: "Електроніка" },
+        ];
+
+        // Функція фільтрації товарів
+        function filterProducts(products, minPrice, maxPrice, category) {
+            return products.filter(product => {
+                // Умова для фільтрації товарів за ціною та категорією
+                return (
+                    product.price >= minPrice &&
+                    product.price <= maxPrice &&
+                    (category ? product.category === category : true)
+                );
+            });
+        }
+
+        // Функція для застосування фільтрації
+        function applyFilter() {
+            // Отримуємо мінімальну ціну з поля і перетворюємо в число (за замовчуванням 0)
+            const minPrice = parseInt(document.getElementById("minPrice").value) || 0;
+            // Отримуємо максимальну ціну з поля і перетворюємо в число (за замовчуванням нескінченність)
+            const maxPrice = parseInt(document.getElementById("maxPrice").value) || Infinity;
+            // Отримуємо вибрану категорію з випадаючого списку
+            const category = document.getElementById("category").value;
+
+            // Застосовуємо фільтр до продуктів і зберігаємо результат
+            const filteredProducts = filterProducts(products, minPrice, maxPrice, category);
+
+            // Знаходимо елемент для відображення результатів
+            const results = document.getElementById("results");
+            results.innerHTML = ""; // Очищаємо попередні результати
+
+            // Відображаємо відфільтровані товари
+            filteredProducts.forEach(product => {
+                const item = document.createElement("li");
+                item.textContent = `${product.name} - ${product.price}₴`;
+                results.appendChild(item);
+            });
+        }
+    </script>
+</body>
+
+</html>
